@@ -7,13 +7,26 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { baseCurrency, targetCurrency, condition, threshold, lineToken } = body;
+  const { baseCurrency, targetCurrency, mode, condition, threshold, technicalType, lineToken } = body;
 
-  if (!baseCurrency || !targetCurrency || !condition || threshold == null || !lineToken) {
-    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+  if (!baseCurrency || !targetCurrency || !mode || !lineToken) {
+    return NextResponse.json({ error: "必須項目が不足しています" }, { status: 400 });
+  }
+  if (mode === "price" && (condition == null || threshold == null)) {
+    return NextResponse.json({ error: "価格アラートには条件とレートが必要です" }, { status: 400 });
+  }
+  if (mode === "technical" && !technicalType) {
+    return NextResponse.json({ error: "テクニカル条件を選択してください" }, { status: 400 });
   }
 
-  const alert = await addAlert({ baseCurrency, targetCurrency, condition, threshold, lineToken, active: true });
+  const alert = await addAlert({
+    baseCurrency, targetCurrency, mode,
+    condition: mode === "price" ? condition : undefined,
+    threshold: mode === "price" ? parseFloat(threshold) : undefined,
+    technicalType: mode === "technical" ? technicalType : undefined,
+    lineToken,
+    active: true,
+  });
   return NextResponse.json(alert, { status: 201 });
 }
 
