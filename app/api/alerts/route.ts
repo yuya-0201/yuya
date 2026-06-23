@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { readAlerts, addAlert, deleteAlert } from "@/lib/alerts";
 
 export async function GET() {
-  return NextResponse.json(readAlerts());
+  return NextResponse.json(await readAlerts());
 }
 
 export async function POST(req: NextRequest) {
@@ -13,14 +13,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
-  const alert = addAlert({ baseCurrency, targetCurrency, condition, threshold, lineToken, active: true });
+  const alert = await addAlert({ baseCurrency, targetCurrency, condition, threshold, lineToken, active: true });
   return NextResponse.json(alert, { status: 201 });
 }
 
 export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
-  const deleted = deleteAlert(id);
+  const deleted = await deleteAlert(id);
   if (!deleted) return NextResponse.json({ error: "Alert not found" }, { status: 404 });
   return NextResponse.json({ success: true });
 }

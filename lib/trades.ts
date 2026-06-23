@@ -1,49 +1,39 @@
-import fs from "fs";
-import path from "path";
-import { TradeRecord, TradesStore } from "./types";
+import { kv } from "@vercel/kv";
+import { TradeRecord } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const TRADES_FILE = path.join(DATA_DIR, "trades.json");
+const TRADES_KEY = "trades";
 
-function readStore(): TradesStore {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  if (!fs.existsSync(TRADES_FILE)) {
-    fs.writeFileSync(TRADES_FILE, JSON.stringify({ trades: [] }));
-  }
-  return JSON.parse(fs.readFileSync(TRADES_FILE, "utf-8"));
+export async function getTrades(): Promise<TradeRecord[]> {
+  const trades = await kv.get<TradeRecord[]>(TRADES_KEY);
+  return trades ?? [];
 }
 
-function writeStore(store: TradesStore) {
-  fs.writeFileSync(TRADES_FILE, JSON.stringify(store, null, 2));
+async function writeTrades(trades: TradeRecord[]): Promise<void> {
+  await kv.set(TRADES_KEY, trades);
 }
 
-export function getTrades(): TradeRecord[] {
-  return readStore().trades;
-}
-
-export function addTrade(trade: Omit<TradeRecord, "id" | "createdAt">): TradeRecord {
-  const store = readStore();
+export async function addTrade(trade: Omit<TradeRecord, "id" | "createdAt">): Promise<TradeRecord> {
+  const trades = await getTrades();
   const newTrade: TradeRecord = {
     ...trade,
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
   };
-  store.trades.unshift(newTrade);
-  writeStore(store);
+  trades.unshift(newTrade);
+  await writeTrades(trades);
   return newTrade;
 }
 
-export function updateTradeAnalysis(id: string, analysis: string): void {
-  const store = readStore();
-  const trade = store.trades.find((t) => t.id === id);
+export async function updateTradeAnalysis(id: string, analysis: string): Promise<void> {
+  const trades = await getTrades();
+  const trade = trades.find((t) => t.id === id);
   if (trade) {
     trade.analysis = analysis;
-    writeStore(store);
+    await writeTrades(trades);
   }
 }
 
-export function deleteTrade(id: string): void {
-  const store = readStore();
-  store.trades = store.trades.filter((t) => t.id !== id);
-  writeStore(store);
+export async function deleteTrade(id: string): Promise<void> {
+  const trades = await getTrades();
+  await writeTrades(trades.filter((t) => t.id !== id));
 }

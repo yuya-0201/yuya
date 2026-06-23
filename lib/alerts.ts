@@ -1,52 +1,42 @@
-import fs from "fs";
-import path from "path";
-import { Alert, AlertsStore } from "./types";
+import { kv } from "@vercel/kv";
+import { Alert } from "./types";
 
-const DATA_FILE = path.join(process.cwd(), "data", "alerts.json");
+const ALERTS_KEY = "alerts";
 
-function ensureDataFile(): void {
-  const dir = path.dirname(DATA_FILE);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify({ alerts: [] }));
+export async function readAlerts(): Promise<Alert[]> {
+  const alerts = await kv.get<Alert[]>(ALERTS_KEY);
+  return alerts ?? [];
 }
 
-export function readAlerts(): Alert[] {
-  ensureDataFile();
-  const raw = fs.readFileSync(DATA_FILE, "utf-8");
-  const store: AlertsStore = JSON.parse(raw);
-  return store.alerts;
+export async function writeAlerts(alerts: Alert[]): Promise<void> {
+  await kv.set(ALERTS_KEY, alerts);
 }
 
-export function writeAlerts(alerts: Alert[]): void {
-  ensureDataFile();
-  fs.writeFileSync(DATA_FILE, JSON.stringify({ alerts }, null, 2));
-}
-
-export function addAlert(alert: Omit<Alert, "id" | "createdAt">): Alert {
-  const alerts = readAlerts();
+export async function addAlert(alert: Omit<Alert, "id" | "createdAt">): Promise<Alert> {
+  const alerts = await readAlerts();
   const newAlert: Alert = {
     ...alert,
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
   };
   alerts.push(newAlert);
-  writeAlerts(alerts);
+  await writeAlerts(alerts);
   return newAlert;
 }
 
-export function deleteAlert(id: string): boolean {
-  const alerts = readAlerts();
+export async function deleteAlert(id: string): Promise<boolean> {
+  const alerts = await readAlerts();
   const filtered = alerts.filter((a) => a.id !== id);
   if (filtered.length === alerts.length) return false;
-  writeAlerts(filtered);
+  await writeAlerts(filtered);
   return true;
 }
 
-export function updateAlert(id: string, updates: Partial<Alert>): Alert | null {
-  const alerts = readAlerts();
+export async function updateAlert(id: string, updates: Partial<Alert>): Promise<Alert | null> {
+  const alerts = await readAlerts();
   const index = alerts.findIndex((a) => a.id === id);
   if (index === -1) return null;
   alerts[index] = { ...alerts[index], ...updates };
-  writeAlerts(alerts);
+  await writeAlerts(alerts);
   return alerts[index];
 }

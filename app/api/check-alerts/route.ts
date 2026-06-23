@@ -4,7 +4,7 @@ import { getRate } from "@/lib/fx";
 import { sendLineNotification } from "@/lib/line";
 
 export async function POST() {
-  const alerts = readAlerts().filter((a) => a.active);
+  const alerts = (await readAlerts()).filter((a) => a.active);
   const results: { id: string; triggered: boolean; error?: string }[] = [];
 
   for (const alert of alerts) {
@@ -20,7 +20,7 @@ export async function POST() {
           `${alert.baseCurrency}/${alert.targetCurrency} が ${alert.threshold} ${direction} になりました\n` +
           `現在レート: ${rate.toFixed(4)}`;
         await sendLineNotification(alert.lineToken, message);
-        updateAlert(alert.id, { lastTriggeredAt: new Date().toISOString() });
+        await updateAlert(alert.id, { lastTriggeredAt: new Date().toISOString() });
       }
 
       results.push({ id: alert.id, triggered });

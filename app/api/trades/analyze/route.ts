@@ -7,7 +7,7 @@ const client = new Anthropic();
 export async function POST(req: NextRequest) {
   const { id } = await req.json();
 
-  const trades = getTrades();
+  const trades = await getTrades();
   const trade = id ? trades.find((t) => t.id === id) : null;
 
   if (id && !trade) {
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
     .join("\n");
 
   if (trade) {
-    updateTradeAnalysis(trade.id, analysisText);
+    await updateTradeAnalysis(trade.id, analysisText);
   }
 
   return NextResponse.json({ analysis: analysisText });

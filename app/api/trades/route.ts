@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTrades, addTrade, deleteTrade } from "@/lib/trades";
 
 export async function GET() {
-  return NextResponse.json(getTrades());
+  return NextResponse.json(await getTrades());
 }
 
 export async function POST(req: NextRequest) {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "必須項目が不足しています" }, { status: 400 });
   }
 
-  const trade = addTrade({
+  const trade = await addTrade({
     baseCurrency,
     targetCurrency,
     direction,
@@ -30,6 +30,6 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
   if (!id) return NextResponse.json({ error: "idが必要です" }, { status: 400 });
-  deleteTrade(id);
+  await deleteTrade(id);
   return NextResponse.json({ ok: true });
 }
