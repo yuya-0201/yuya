@@ -21,3 +21,23 @@ export interface FxRate {
   date: string;
   rates: Record<string, number>;
 }
+
+export type TradeDirection = "buy" | "sell";
+
+export interface TradeRecord {
+  id: string;
+  baseCurrency: string;
+  targetCurrency: string;
+  direction: TradeDirection;
+  entryRate: number;
+  exitRate: number;
+  lotSize: number;
+  goodPoints: string;
+  reflections: string;
+  createdAt: string;
+  analysis?: string;
+}
+
+export interface TradesStore {
+  trades: TradeRecord[];
+}

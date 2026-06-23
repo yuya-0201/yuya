@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Alert } from "@/lib/types";
+import Link from "next/link";
 import AlertForm from "./components/AlertForm";
 import AlertList from "./components/AlertList";
 import RateDisplay from "./components/RateDisplay";
@@ -43,6 +44,9 @@ export default function Home() {
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-green-400">FX通知アプリ</h1>
           <p className="text-gray-400 mt-1">為替レートが条件を満たしたらLINEで通知</p>
+          <Link href="/journal" className="inline-block mt-3 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+            トレード日誌・AI分析 →
+          </Link>
         </header>
 
         <RateDisplay />
