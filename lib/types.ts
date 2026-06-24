@@ -22,7 +22,6 @@ export interface Alert {
   threshold?: number;
   // technical mode
   technicalType?: TechnicalType;
-  lineToken: string;
   active: boolean;
   createdAt: string;
   lastTriggeredAt?: string;

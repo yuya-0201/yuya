@@ -7,9 +7,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { baseCurrency, targetCurrency, mode, condition, threshold, technicalType, lineToken } = body;
+  const { baseCurrency, targetCurrency, mode, condition, threshold, technicalType } = body;
 
-  if (!baseCurrency || !targetCurrency || !mode || !lineToken) {
+  if (!baseCurrency || !targetCurrency || !mode) {
     return NextResponse.json({ error: "必須項目が不足しています" }, { status: 400 });
   }
   if (mode === "price" && (condition == null || threshold == null)) {
@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
     condition: mode === "price" ? condition : undefined,
     threshold: mode === "price" ? parseFloat(threshold) : undefined,
     technicalType: mode === "technical" ? technicalType : undefined,
-    lineToken,
     active: true,
   });
   return NextResponse.json(alert, { status: 201 });

@@ -75,9 +75,6 @@ export default function AlertList({ alerts, onDeleted }: Props) {
               削除
             </button>
           </div>
-          <div className="mt-2 text-xs text-gray-600 font-mono truncate">
-            TOKEN: {alert.lineToken.slice(0, 8)}...
-          </div>
         </div>
       ))}
     </div>

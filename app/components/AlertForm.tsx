@@ -34,7 +34,6 @@ export default function AlertForm({ onAdded }: Props) {
   const [condition, setCondition] = useState<"above" | "below">("above");
   const [threshold, setThreshold] = useState("");
   const [technicalType, setTechnicalType] = useState<TechnicalType>("bb_upper_2");
-  const [lineToken, setLineToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -43,14 +42,13 @@ export default function AlertForm({ onAdded }: Props) {
     e.preventDefault();
     setError(null);
     setSuccess(false);
-    if (!lineToken) { setError("LINE Notifyトークンを入力してください"); return; }
     if (mode === "price" && !threshold) { setError("レートを入力してください"); return; }
     setLoading(true);
     try {
       const res = await fetch("/api/alerts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ baseCurrency, targetCurrency, mode, condition, threshold, technicalType, lineToken }),
+        body: JSON.stringify({ baseCurrency, targetCurrency, mode, condition, threshold, technicalType }),
       });
       if (!res.ok) {
         const d = await res.json();
@@ -140,13 +138,6 @@ export default function AlertForm({ onAdded }: Props) {
           </select>
         </div>
       )}
-
-      <div>
-        <label className="block text-xs text-gray-400 mb-1">LINE Notify トークン</label>
-        <input type="text" value={lineToken} onChange={(e) => setLineToken(e.target.value)}
-          placeholder="トークンを貼り付け"
-          className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm font-mono" />
-      </div>
 
       {error && <p className="text-red-400 text-sm">{error}</p>}
       {success && <p className="text-green-400 text-sm">アラートを登録しました</p>}
