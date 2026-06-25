@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>既存の研究と本稿の貢献</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+    background: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+  }
+  .slide {
+    width: 960px;
+    height: 540px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 64px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    page-break-after: always;
+  }
+  .slide-number {
+    position: absolute;
+    bottom: 16px;
+    right: 24px;
+    font-size: 13px;
+    color: #aaa;
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 36px;
+    font-weight: 300;
+    margin-bottom: 32px;
+    letter-spacing: 0.02em;
+  }
+  p, li {
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  ul li::before {
+    content: "・";
+  }
+  .table-wrap {
+    margin-top: 8px;
+    overflow-x: auto;
+  }
+  table {
+    border-collapse: collapse;
+    font-size: 15px;
+    font-weight: 300;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid #888;
+    padding: 6px 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  th {
+    background: #f0f0f0;
+    font-weight: 400;
+  }
+  td:first-child {
+    text-align: left;
+  }
+  .highlight-row td {
+    background: #fffbe6;
+    font-weight: 400;
+  }
+  .arrow {
+    font-size: 28px;
+    margin: 12px 0;
+    text-align: center;
+  }
+  .box {
+    border: 2px solid #333;
+    padding: 18px 28px;
+    margin-top: 16px;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+  .indent {
+    padding-left: 2em;
+  }
+
+  /* print */
+  @media print {
+    body { background: white; padding: 0; gap: 0; }
+    .slide { box-shadow: none; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<!-- スライド8: 表1の再確認 -->
+<div class="slide">
+  <h1>表1の再確認</h1>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>プロトコル</th>
+          <th>枚数</th>
+          <th>有限回数か？</th>
+          <th>閉じているか？</th>
+          <th>一様分布か？</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Crépeau-Kilian, 1993</td>
+          <td>10</td>
+          <td>no</td>
+          <td>yes</td>
+          <td>yes</td>
+        </tr>
+        <tr>
+          <td>Niemi-Renvall, 1998</td>
+          <td>12</td>
+          <td>no</td>
+          <td>yes</td>
+          <td>yes</td>
+        </tr>
+        <tr>
+          <td>Stiglic, 2001</td>
+          <td>8</td>
+          <td>no</td>
+          <td>yes</td>
+          <td>yes</td>
+        </tr>
+        <tr>
+          <td>Mizuki-Sone, 2009</td>
+          <td>6</td>
+          <td>yes</td>
+          <td>yes</td>
+          <td>yes</td>
+        </tr>
+        <tr>
+          <td>Koch-Walzer-Härtel, 2015 (4枚)</td>
+          <td>4</td>
+          <td>no</td>
+          <td>yes</td>
+          <td><strong>no</strong></td>
+        </tr>
+        <tr>
+          <td>Koch-Walzer-Härtel, 2015 (5枚)</td>
+          <td>5</td>
+          <td>yes</td>
+          <td><strong>no</strong></td>
+          <td><strong>no</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="slide-number">8</div>
+</div>
+
+<!-- スライド9: 表1から読み取れること -->
+<div class="slide">
+  <h1>表1から読み取れること</h1>
+  <ul>
+    <li>2009年までの4つのプロトコルは「閉じているか？」「一様分布か？」が全て <strong>yes</strong></li>
+    <li>これら4つは<strong>ランダムカット</strong>または<strong>ランダム二等分割カット</strong>のみを使用</li>
+    <li>Koch-Walzer-Härtelのプロトコルは「閉じていない」または「一様でない」シャッフルを使用
+      <ul style="margin-top:8px; padding-left:2em;">
+        <li style="font-size:19px;">→ 人間が実際に実装するのは簡単ではない</li>
+      </ul>
+    </li>
+  </ul>
+  <div class="slide-number">9</div>
+</div>
+
+<!-- スライド10: 未解決問題 -->
+<div class="slide">
+  <h1>未解決問題</h1>
+  <p style="margin-bottom: 12px;">以上の背景から、この研究分野の最も興味深い未解決問題の一つが生じる。</p>
+  <div class="box">
+    5枚以下のカードで、<br>
+    <strong>一様で閉じたシャッフルのみ</strong>を使い、<br>
+    コミット型ANDプロトコルを構成できるか？
+  </div>
+  <div class="arrow">↓</div>
+  <p>本稿では、この未解決問題を<strong>肯定的に解決</strong>する</p>
+  <div class="slide-number">10</div>
+</div>
+
+<!-- スライド11: 本稿の貢献 -->
+<div class="slide">
+  <h1>本稿の貢献</h1>
+  <ul>
+    <li>5枚のカードで、一様で閉じたシャッフルのみを使うコミット型ANDプロトコルを構成</li>
+    <li>使用するシャッフルは<strong>ランダムカット</strong>と<strong>ランダム二等分割カット</strong>のみ</li>
+    <li>どちらも人間が容易に実装できることが確認されている</li>
+    <li>提案プロトコルは人間が実際に実行することが<strong>可能</strong>である</li>
+  </ul>
+  <div class="slide-number">11</div>
+</div>
+
+</body>
+</html>
