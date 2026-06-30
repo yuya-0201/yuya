@@ -1,0 +1,31 @@
+<?php
+require_once 'db_connect.php';
+
+$sql = "SELECT Code, Name, Category, Price FROM Product WHERE Category LIKE '菓子'";
+$stmt = $pdo->query($sql);
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>問題1</title>
+</head>
+<body>
+<table border="1">
+<tr>
+<th>商品番号</th>
+<th>商品名</th>
+<th>種別</th>
+<th>単価</th>
+</tr>
+<?php while ($row = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
+<tr>
+<td><?= htmlspecialchars($row['Code']) ?></td>
+<td><?= htmlspecialchars($row['Name']) ?></td>
+<td><?= htmlspecialchars($row['Category']) ?></td>
+<td><?= htmlspecialchars($row['Price']) ?></td>
+</tr>
+<?php endwhile; ?>
+</table>
+</body>
+</html>
